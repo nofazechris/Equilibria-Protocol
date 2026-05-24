@@ -1,37 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap');
+/* ============================================
+   EQUILIBRIA PROTOCOL — MAIN CSS ENTRY POINT
+   Import order matters — variables first
+   ============================================ */
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-:root {
-  --bg-primary: #0a0b0d;
-  --bg-secondary: #0f1114;
-  --bg-card: #13161a;
-  --bg-card-hover: #181c21;
-  --border: #1e2530;
-  --border-bright: #2a3444;
-  --blue-primary: #1a6cf6;
-  --blue-secondary: #1254c4;
-  --blue-dim: #0d2d6e;
-  --blue-glow: rgba(26, 108, 246, 0.15);
-  --text-primary: #e8edf5;
-  --text-secondary: #7a8a9e;
-  --text-dim: #3d4f63;
-  --green: #00c896;
-  --red: #e63946;
-  --yellow: #f4a621;
-  --font-display: 'Syne', sans-serif;
-  --font-mono: 'DM Mono', monospace;
-}
-
-body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--font-mono);
-  font-size: 13px;
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--bg-primary); }
-::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
+@import './styles/variables.css';
+@import './styles/base.css';
+@import './styles/components.css';

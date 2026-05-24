@@ -1,0 +1,254 @@
+ /* Component Styles */
+
+/* ---- Layout ---- */
+
+.page-wrapper {
+  padding: var(--space-xl);
+  max-width: 1300px;
+}
+
+.page-header {
+  margin-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-lg);
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* ---- Cards ---- */
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.card-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.card-value {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ---- Metric grid (flush borderless) ---- */
+
+.metric-grid {
+  display: grid;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.metric-grid .metric-cell {
+  background: var(--bg-card);
+  padding: 18px 20px;
+}
+
+/* ---- Tables ---- */
+
+.data-table thead th {
+  text-align: left;
+  padding: 8px 12px;
+  color: var(--text-dim);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  font-weight: 400;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table tbody td {
+  padding: 10px 12px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table tfoot td {
+  padding: 10px 12px;
+  font-size: 12px;
+  border-top: 1px solid var(--border-bright);
+}
+
+/* ---- Status badges ---- */
+
+.badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
+}
+
+.badge-success { background: rgba(0,200,150,0.08);  color: var(--green); }
+.badge-error   { background: rgba(230,57,70,0.08);  color: var(--red);   }
+.badge-warning { background: rgba(244,166,33,0.08); color: var(--yellow);}
+.badge-info    { background: rgba(26,108,246,0.08); color: var(--blue-primary); }
+.badge-live    { background: var(--blue-dim); color: var(--blue-primary); }
+
+/* ---- Buttons ---- */
+
+.btn-primary {
+  padding: 10px 20px;
+  background: var(--blue-primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.btn-ghost {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.btn-ghost:hover {
+  border-color: var(--border-bright);
+  color: var(--text-primary);
+}
+
+.btn-active {
+  border-color: var(--blue-primary);
+  background: var(--blue-dim);
+  color: var(--blue-primary);
+}
+
+/* ---- Inputs ---- */
+
+.input {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+  width: 100%;
+  transition: var(--transition);
+}
+
+.input:focus {
+  border-color: var(--blue-primary);
+}
+
+/* ---- Tab bar ---- */
+
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.tab-item {
+  padding: 8px 20px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid transparent;
+  margin-bottom: -1px;
+  transition: var(--transition);
+}
+
+.tab-item.active {
+  color: var(--blue-primary);
+  border-bottom-color: var(--blue-primary);
+}
+
+/* ---- Score bar ---- */
+
+.score-bar-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.score-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+/* ---- Terminal ---- */
+
+.terminal {
+  background: var(--bg-terminal);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.9;
+  overflow: auto;
+}
+
+/* ---- Progress bars ---- */
+
+.progress-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+/* ---- Sidebar nav item ---- */
+
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: none;
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  margin-bottom: 2px;
+  text-align: left;
+  transition: var(--transition);
+}
+
+.nav-item.active {
+  background: var(--blue-glow);
+  color: var(--blue-primary);
+  border-left-color: var(--blue-primary);
+}
+
+.nav-item:hover:not(.active) {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.02);
+}

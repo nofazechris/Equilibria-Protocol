@@ -1,11 +1,30 @@
 import { opportunities } from '../data/mockData'
 import { useState } from 'react'
+import '../styles/opportunity.css'
 
 const statusColors = {
-  active: '#1a6cf6',
-  pending: '#f4a621',
-  executed: '#00c896',
-  rejected: '#e63946',
+  active:   'var(--blue-primary)',
+  pending:  'var(--yellow)',
+  executed: 'var(--green)',
+  rejected: 'var(--red)',
+}
+
+const statusBadge = {
+  active:   'badge-info',
+  pending:  'badge-warning',
+  executed: 'badge-success',
+  rejected: 'badge-error',
+}
+
+function ScoreCell({ value, color }) {
+  return (
+    <div className="score-cell">
+      <div className="score-bar-track">
+        <div className="score-bar-fill" style={{ width: `${value}%`, background: color }} />
+      </div>
+      <span className="score-value" style={{ color }}>{value}</span>
+    </div>
+  )
 }
 
 export default function OpportunityFeed() {
@@ -13,74 +32,65 @@ export default function OpportunityFeed() {
   const filtered = filter === 'all' ? opportunities : opportunities.filter(o => o.status === filter)
 
   return (
-    <div style={{ padding: '32px', maxWidth: '1300px' }}>
+    <div className="opportunity-wrapper">
 
-      <div style={{ marginBottom: '32px', borderBottom: '1px solid #1e2530', paddingBottom: '20px' }}>
-        <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, marginBottom: '4px' }}>Opportunity Feed</div>
-        <div style={{ color: '#7a8a9e', fontSize: '12px' }}>AI-scored market opportunities — ranked by composite stability-adjusted return</div>
+      <div className="opportunity-header">
+        <div className="page-title">Opportunity Feed</div>
+        <div className="page-subtitle">AI-scored market opportunities — ranked by composite stability-adjusted return</div>
       </div>
 
-      {/* Filter row */}
-      <div style={{ display: 'flex', gap: '6px', marginBottom: '20px' }}>
+      {/* Filters */}
+      <div className="filter-bar">
         {['all', 'active', 'pending', 'executed', 'rejected'].map(f => (
-          <button key={f} onClick={() => setFilter(f)} style={{
-            padding: '5px 12px', borderRadius: '3px', border: '1px solid',
-            borderColor: filter === f ? '#1a6cf6' : '#1e2530',
-            background: filter === f ? '#0d2d6e' : 'transparent',
-            color: filter === f ? '#1a6cf6' : '#7a8a9e',
-            cursor: 'pointer', fontSize: '11px', fontFamily: 'var(--font-mono)',
-            letterSpacing: '0.06em',
-          }}>{f.toUpperCase()}</button>
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`filter-btn ${filter === f ? 'active' : ''}`}
+          >
+            {f.toUpperCase()}
+          </button>
         ))}
-        <span style={{ marginLeft: 'auto', color: '#3d4f63', fontSize: '11px', alignSelf: 'center' }}>
-          {filtered.length} opportunities
-        </span>
+        <span className="filter-count">{filtered.length} opportunities</span>
       </div>
 
-      {/* Table view — more useful than cards for comparison */}
-      <div style={{ background: '#13161a', border: '1px solid #1e2530', borderRadius: '6px', overflow: 'hidden', marginBottom: '24px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      {/* Table */}
+      <div className="opp-table-panel">
+        <table className="opp-table">
           <thead>
-            <tr style={{ borderBottom: '1px solid #1e2530' }}>
+            <tr>
               {['PAIR', 'SPREAD', 'SIZE (POT)', 'PROFIT', 'RISK', 'STABILITY', 'CONFIDENCE', 'COMPOSITE', 'STATUS', 'AGE'].map(h => (
-                <th key={h} style={{ textAlign: 'left', padding: '10px 14px', color: '#3d4f63', fontSize: '10px', letterSpacing: '0.08em', fontWeight: 400 }}>{h}</th>
+                <th key={h}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {filtered.map(opp => {
-              const composite = Math.round(opp.profitScore * 0.3 + (100 - opp.riskScore) * 0.25 + opp.stabilityScore * 0.35 + opp.confidenceScore * 0.1)
+              const composite = Math.round(
+                opp.profitScore    * 0.30 +
+                (100 - opp.riskScore) * 0.25 +
+                opp.stabilityScore * 0.35 +
+                opp.confidenceScore * 0.10
+              )
               return (
-                <tr key={opp.id} style={{ borderBottom: '1px solid #1e2530', background: opp.status === 'active' ? 'rgba(26,108,246,0.03)' : 'transparent' }}>
-                  <td style={{ padding: '12px 14px', fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '13px' }}>{opp.pair}</td>
-                  <td style={{ padding: '12px 14px', color: '#f4a621', fontSize: '12px' }}>{opp.spread}%</td>
-                  <td style={{ padding: '12px 14px', fontSize: '12px' }}>{opp.size.toLocaleString()}</td>
-                  <td style={{ padding: '12px 14px' }}>
-                    <ScoreCell value={opp.profitScore} color="#00c896" />
-                  </td>
-                  <td style={{ padding: '12px 14px' }}>
-                    <ScoreCell value={opp.riskScore} color="#e63946" invert />
-                  </td>
-                  <td style={{ padding: '12px 14px' }}>
-                    <ScoreCell value={opp.stabilityScore} color="#1a6cf6" />
-                  </td>
-                  <td style={{ padding: '12px 14px' }}>
-                    <ScoreCell value={opp.confidenceScore} color="#7a8a9e" />
-                  </td>
-                  <td style={{ padding: '12px 14px' }}>
-                    <span style={{
-                      fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '15px',
-                      color: composite >= 75 ? '#00c896' : composite >= 55 ? '#f4a621' : '#e63946'
+                <tr key={opp.id} className={opp.status === 'active' ? 'row-active' : ''}>
+                  <td><span className="opp-pair">{opp.pair}</span></td>
+                  <td><span className="opp-spread">{opp.spread}%</span></td>
+                  <td>{opp.size.toLocaleString()}</td>
+                  <td><ScoreCell value={opp.profitScore}    color="var(--green)" /></td>
+                  <td><ScoreCell value={opp.riskScore}      color="var(--red)" /></td>
+                  <td><ScoreCell value={opp.stabilityScore} color="var(--blue-primary)" /></td>
+                  <td><ScoreCell value={opp.confidenceScore} color="var(--text-secondary)" /></td>
+                  <td>
+                    <span className="opp-composite" style={{
+                      color: composite >= 75 ? 'var(--green)' : composite >= 55 ? 'var(--yellow)' : 'var(--red)'
                     }}>{composite}</span>
                   </td>
-                  <td style={{ padding: '12px 14px' }}>
-                    <span style={{
-                      fontSize: '10px', padding: '2px 8px', borderRadius: '3px', letterSpacing: '0.05em',
-                      background: `${statusColors[opp.status]}15`,
-                      color: statusColors[opp.status],
-                    }}>{opp.status.toUpperCase()}</span>
+                  <td>
+                    <span className={`badge ${statusBadge[opp.status]}`}>
+                      {opp.status.toUpperCase()}
+                    </span>
                   </td>
-                  <td style={{ padding: '12px 14px', color: '#3d4f63', fontSize: '11px' }}>{opp.time}</td>
+                  <td style={{ color: 'var(--text-dim)', fontSize: '11px' }}>{opp.time}</td>
                 </tr>
               )
             })}
@@ -89,27 +99,16 @@ export default function OpportunityFeed() {
       </div>
 
       {/* Scoring legend */}
-      <div style={{ background: '#13161a', border: '1px solid #1e2530', borderRadius: '6px', padding: '16px 20px' }}>
-        <div style={{ fontSize: '10px', color: '#3d4f63', letterSpacing: '0.08em', marginBottom: '10px' }}>COMPOSITE SCORE FORMULA</div>
-        <div style={{ display: 'flex', gap: '32px', fontSize: '11px', color: '#7a8a9e' }}>
-          <span><span style={{ color: '#00c896' }}>Profitability</span> × 0.30</span>
-          <span><span style={{ color: '#e63946' }}>Risk (inverted)</span> × 0.25</span>
-          <span><span style={{ color: '#1a6cf6' }}>Stability Impact</span> × 0.35</span>
-          <span><span style={{ color: '#7a8a9e' }}>Confidence</span> × 0.10</span>
-          <span style={{ marginLeft: 'auto', color: '#3d4f63' }}>Threshold to execute: 70</span>
+      <div className="scoring-legend">
+        <div className="scoring-legend-label">COMPOSITE SCORE FORMULA</div>
+        <div className="scoring-legend-row">
+          <span><span style={{ color: 'var(--green)' }}>Profitability</span> × 0.30</span>
+          <span><span style={{ color: 'var(--red)' }}>Risk (inverted)</span> × 0.25</span>
+          <span><span style={{ color: 'var(--blue-primary)' }}>Stability Impact</span> × 0.35</span>
+          <span><span style={{ color: 'var(--text-secondary)' }}>Confidence</span> × 0.10</span>
+          <span className="scoring-legend-threshold">Execute threshold: ≥ 70</span>
         </div>
       </div>
-    </div>
-  )
-}
-
-function ScoreCell({ value, color, invert }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <div style={{ width: '40px', height: '3px', background: '#1e2530', borderRadius: '2px' }}>
-        <div style={{ width: `${value}%`, height: '100%', background: color, borderRadius: '2px' }} />
-      </div>
-      <span style={{ fontSize: '11px', color: invert ? (value > 50 ? '#e63946' : '#7a8a9e') : color }}>{value}</span>
     </div>
   )
 }

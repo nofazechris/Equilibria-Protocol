@@ -1,0 +1,49 @@
+/* Variables */
+
+:root {
+  /* Backgrounds */
+  --bg-primary:       #0a0b0d;
+  --bg-secondary:     #0f1114;
+  --bg-card:          #13161a;
+  --bg-card-hover:    #181c21;
+  --bg-terminal:      #080a0c;
+
+  /* Borders */
+  --border:           #1e2530;
+  --border-bright:    #2a3444;
+
+  /* Brand blue */
+  --blue-primary:     #1a6cf6;
+  --blue-secondary:   #1254c4;
+  --blue-dim:         #0d2d6e;
+  --blue-glow:        rgba(26, 108, 246, 0.15);
+
+  /* Text */
+  --text-primary:     #e8edf5;
+  --text-secondary:   #7a8a9e;
+  --text-dim:         #3d4f63;
+
+  /* Status colors */
+  --green:            #00c896;
+  --red:              #e63946;
+  --yellow:           #f4a621;
+
+  /* Typography */
+  --font-display:     'Syne', sans-serif;
+  --font-mono:        'DM Mono', monospace;
+
+  /* Spacing scale */
+  --space-xs:         4px;
+  --space-sm:         8px;
+  --space-md:         16px;
+  --space-lg:         24px;
+  --space-xl:         32px;
+
+  /* Border radius */
+  --radius-sm:        3px;
+  --radius-md:        6px;
+  --radius-lg:        8px;
+
+  /* Transitions */
+  --transition:       all 0.15s ease;
+}

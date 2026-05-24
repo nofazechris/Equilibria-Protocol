@@ -1,0 +1,141 @@
+/* ============================================
+   OPPORTUNITY FEED PAGE STYLES
+   ============================================ */
+
+.opportunity-wrapper {
+  padding: var(--space-xl);
+  max-width: 1300px;
+}
+
+.opportunity-header {
+  margin-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-lg);
+}
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.filter-btn {
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  transition: var(--transition);
+}
+
+.filter-btn.active {
+  border-color: var(--blue-primary);
+  background: var(--blue-dim);
+  color: var(--blue-primary);
+}
+
+.filter-count {
+  margin-left: auto;
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+/* Opportunity table */
+.opp-table-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.opp-table th {
+  text-align: left;
+  padding: 10px 14px;
+  color: var(--text-dim);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  font-weight: 400;
+  border-bottom: 1px solid var(--border);
+}
+
+.opp-table td {
+  padding: 12px 14px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.opp-table tr.row-active {
+  background: rgba(26, 108, 246, 0.03);
+}
+
+.opp-pair {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.opp-spread {
+  color: var(--yellow);
+}
+
+.opp-composite {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* Score bar cell */
+.score-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.score-bar-track {
+  width: 40px;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.score-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+.score-value {
+  font-size: 11px;
+}
+
+/* Scoring legend */
+.scoring-legend {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+}
+
+.scoring-legend-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.scoring-legend-row {
+  display: flex;
+  gap: 32px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+.scoring-legend-threshold {
+  margin-left: auto;
+  color: var(--text-dim);
+}

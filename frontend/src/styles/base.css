@@ -1,0 +1,56 @@
+/* Base Styles */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap');
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar         { width: 4px; height: 4px; }
+::-webkit-scrollbar-track   { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb   { background: var(--border-bright); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+/* Selection */
+::selection {
+  background: var(--blue-dim);
+  color: var(--text-primary);
+}
+
+/* Remove default button styles */
+button {
+  cursor: pointer;
+  font-family: var(--font-mono);
+}
+
+/* Remove default input styles */
+input, select, textarea {
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+/* Remove default table styles */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
