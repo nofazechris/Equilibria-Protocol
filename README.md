@@ -171,8 +171,8 @@ cd ~/portaldot
 
 Node will start producing blocks. You should see:
 ```
-✨ Imported #1
-✨ Imported #2
+ Imported #1
+ Imported #2
 ...
 Listening for new connections on 127.0.0.1:9944
 ```
