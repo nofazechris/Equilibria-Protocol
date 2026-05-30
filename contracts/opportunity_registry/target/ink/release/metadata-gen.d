@@ -1,0 +1,1 @@
+/home/chris/equilibria/contracts/opportunity_registry/target/ink/release/metadata-gen: /home/chris/equilibria/contracts/opportunity_registry/lib.rs /tmp/cargo-contract_mjge3S/.ink/metadata_gen/main.rs

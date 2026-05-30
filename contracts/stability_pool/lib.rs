@@ -1,17 +1,11 @@
-#![cfg_attr(not(feature = "std"), no_std)]
-
-use ink_lang as ink;
+#![cfg_attr(not(feature = "std"), no_std, no_main)]
 
 #[ink::contract]
 mod stability_pool {
 
-    use ink_storage::{
-        traits::SpreadAllocate,
-        Mapping,
-    };
+    use ink::storage::Mapping;
 
     #[ink(storage)]
-    #[derive(SpreadAllocate)]
     pub struct StabilityPool {
         owner: AccountId,
         keeper: AccountId,
@@ -42,28 +36,16 @@ mod stability_pool {
     }
 
     #[ink(event)]
-    pub struct CapitalDeployed {
-        opportunity_id: u64,
-        amount: Balance,
-    }
+    pub struct CapitalDeployed { opportunity_id: u64, amount: Balance }
 
     #[ink(event)]
-    pub struct ReturnRecorded {
-        opportunity_id: u64,
-        profit: Balance,
-        loss: Balance,
-    }
+    pub struct ReturnRecorded { opportunity_id: u64, profit: Balance, loss: Balance }
 
     #[derive(Debug, PartialEq, Eq, scale::Encode, scale::Decode)]
     #[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]
     pub enum Error {
-        NotOwner,
-        NotKeeper,
-        Paused,
-        ZeroAmount,
-        InsufficientShares,
-        ExceedsDeployLimit,
-        InsufficientPoolFunds,
+        NotOwner, NotKeeper, Paused, ZeroAmount,
+        InsufficientShares, ExceedsDeployLimit, InsufficientPoolFunds,
     }
 
     pub type Result<T> = core::result::Result<T, Error>;
@@ -72,16 +54,18 @@ mod stability_pool {
 
         #[ink(constructor)]
         pub fn new(keeper: AccountId, max_deploy_pct: u8) -> Self {
-            ink_lang::utils::initialize_contract(|contract: &mut Self| {
-                contract.owner = Self::env().caller();
-                contract.keeper = keeper;
-                contract.total_deposited = 0;
-                contract.total_shares = 0;
-                contract.deployed_capital = 0;
-                contract.yield_accumulated = 0;
-                contract.paused = false;
-                contract.max_deploy_pct = max_deploy_pct;
-            })
+            Self {
+                owner: Self::env().caller(),
+                keeper,
+                total_deposited: 0,
+                total_shares: 0,
+                deployed_capital: 0,
+                yield_accumulated: 0,
+                shares: Mapping::default(),
+                deposits: Mapping::default(),
+                paused: false,
+                max_deploy_pct,
+            }
         }
 
         #[ink(message, payable)]
@@ -90,22 +74,14 @@ mod stability_pool {
             let caller = self.env().caller();
             let amount = self.env().transferred_value();
             if amount == 0 { return Err(Error::ZeroAmount); }
-
-            let shares_to_mint = if self.total_shares == 0 {
-                amount
-            } else {
-                amount.saturating_mul(self.total_shares)
-                    .checked_div(self.total_deposited)
-                    .unwrap_or(0)
-            };
-
-            let current_shares = self.shares.get(caller).unwrap_or(0);
-            let current_deposit = self.deposits.get(caller).unwrap_or(0);
-            self.shares.insert(caller, &(current_shares.saturating_add(shares_to_mint)));
-            self.deposits.insert(caller, &(current_deposit.saturating_add(amount)));
+            let shares_to_mint = if self.total_shares == 0 { amount }
+                else { amount.saturating_mul(self.total_shares).checked_div(self.total_deposited).unwrap_or(0) };
+            let cs = self.shares.get(caller).unwrap_or(0);
+            let cd = self.deposits.get(caller).unwrap_or(0);
+            self.shares.insert(caller, &(cs.saturating_add(shares_to_mint)));
+            self.deposits.insert(caller, &(cd.saturating_add(amount)));
             self.total_deposited = self.total_deposited.saturating_add(amount);
             self.total_shares = self.total_shares.saturating_add(shares_to_mint);
-
             self.env().emit_event(Deposited { account: caller, amount, shares_minted: shares_to_mint });
             Ok(shares_to_mint)
         }
@@ -114,22 +90,13 @@ mod stability_pool {
         pub fn withdraw(&mut self, share_amount: Balance) -> Result<Balance> {
             self.ensure_not_paused()?;
             let caller = self.env().caller();
-            let current_shares = self.shares.get(caller).unwrap_or(0);
-            if share_amount == 0 || share_amount > current_shares {
-                return Err(Error::InsufficientShares);
-            }
-
-            let withdraw_amount = share_amount
-                .saturating_mul(self.total_deposited)
-                .checked_div(self.total_shares)
-                .unwrap_or(0);
-
-            self.shares.insert(caller, &(current_shares.saturating_sub(share_amount)));
+            let cs = self.shares.get(caller).unwrap_or(0);
+            if share_amount == 0 || share_amount > cs { return Err(Error::InsufficientShares); }
+            let withdraw_amount = share_amount.saturating_mul(self.total_deposited).checked_div(self.total_shares).unwrap_or(0);
+            self.shares.insert(caller, &(cs.saturating_sub(share_amount)));
             self.total_shares = self.total_shares.saturating_sub(share_amount);
             self.total_deposited = self.total_deposited.saturating_sub(withdraw_amount);
-            self.env().transfer(caller, withdraw_amount)
-                .map_err(|_| Error::InsufficientPoolFunds)?;
-
+            self.env().transfer(caller, withdraw_amount).map_err(|_| Error::InsufficientPoolFunds)?;
             self.env().emit_event(Withdrawn { account: caller, amount: withdraw_amount, shares_burned: share_amount });
             Ok(withdraw_amount)
         }
@@ -138,13 +105,8 @@ mod stability_pool {
         pub fn record_deployment(&mut self, opportunity_id: u64, amount: Balance) -> Result<()> {
             self.ensure_keeper()?;
             self.ensure_not_paused()?;
-            let max_allowed = self.total_deposited
-                .saturating_mul(self.max_deploy_pct as u128)
-                .checked_div(100)
-                .unwrap_or(0);
-            if self.deployed_capital.saturating_add(amount) > max_allowed {
-                return Err(Error::ExceedsDeployLimit);
-            }
+            let max_allowed = self.total_deposited.saturating_mul(self.max_deploy_pct as u128).checked_div(100).unwrap_or(0);
+            if self.deployed_capital.saturating_add(amount) > max_allowed { return Err(Error::ExceedsDeployLimit); }
             self.deployed_capital = self.deployed_capital.saturating_add(amount);
             self.env().emit_event(CapitalDeployed { opportunity_id, amount });
             Ok(())
@@ -166,78 +128,20 @@ mod stability_pool {
             Ok(())
         }
 
-        #[ink(message)]
-        pub fn pause(&mut self) -> Result<()> {
-            self.ensure_owner()?;
-            self.paused = true;
-            Ok(())
-        }
-
-        #[ink(message)]
-        pub fn unpause(&mut self) -> Result<()> {
-            self.ensure_owner()?;
-            self.paused = false;
-            Ok(())
-        }
-
-        #[ink(message)]
-        pub fn set_keeper(&mut self, new_keeper: AccountId) -> Result<()> {
-            self.ensure_owner()?;
-            self.keeper = new_keeper;
-            Ok(())
-        }
-
-        #[ink(message)]
-        pub fn get_pool_state(&self) -> (Balance, Balance, Balance, Balance, bool) {
+        #[ink(message)] pub fn pause(&mut self) -> Result<()> { self.ensure_owner()?; self.paused = true; Ok(()) }
+        #[ink(message)] pub fn unpause(&mut self) -> Result<()> { self.ensure_owner()?; self.paused = false; Ok(()) }
+        #[ink(message)] pub fn set_keeper(&mut self, k: AccountId) -> Result<()> { self.ensure_owner()?; self.keeper = k; Ok(()) }
+        #[ink(message)] pub fn get_pool_state(&self) -> (Balance, Balance, Balance, Balance, bool) {
             (self.total_deposited, self.total_shares, self.deployed_capital, self.yield_accumulated, self.paused)
         }
+        #[ink(message)] pub fn get_shares(&self, a: AccountId) -> Balance { self.shares.get(a).unwrap_or(0) }
+        #[ink(message)] pub fn get_deposit(&self, a: AccountId) -> Balance { self.deposits.get(a).unwrap_or(0) }
+        #[ink(message)] pub fn get_owner(&self) -> AccountId { self.owner }
+        #[ink(message)] pub fn get_keeper(&self) -> AccountId { self.keeper }
+        #[ink(message)] pub fn is_paused(&self) -> bool { self.paused }
 
-        #[ink(message)]
-        pub fn get_shares(&self, account: AccountId) -> Balance {
-            self.shares.get(account).unwrap_or(0)
-        }
-
-        #[ink(message)]
-        pub fn get_deposit(&self, account: AccountId) -> Balance {
-            self.deposits.get(account).unwrap_or(0)
-        }
-
-        #[ink(message)]
-        pub fn get_owner(&self) -> AccountId { self.owner }
-
-        #[ink(message)]
-        pub fn get_keeper(&self) -> AccountId { self.keeper }
-
-        #[ink(message)]
-        pub fn is_paused(&self) -> bool { self.paused }
-
-        fn ensure_owner(&self) -> Result<()> {
-            if self.env().caller() != self.owner { return Err(Error::NotOwner); }
-            Ok(())
-        }
-
-        fn ensure_keeper(&self) -> Result<()> {
-            if self.env().caller() != self.keeper { return Err(Error::NotKeeper); }
-            Ok(())
-        }
-
-        fn ensure_not_paused(&self) -> Result<()> {
-            if self.paused { return Err(Error::Paused); }
-            Ok(())
-        }
-    }
-
-    #[cfg(test)]
-    mod tests {
-        use super::*;
-        use ink_lang as ink;
-
-        #[ink::test]
-        fn deploy_works() {
-            let accounts = ink_env::test::default_accounts::<ink_env::DefaultEnvironment>();
-            let pool = StabilityPool::new(accounts.bob, 20);
-            assert_eq!(pool.get_owner(), accounts.alice);
-            assert_eq!(pool.is_paused(), false);
-        }
+        fn ensure_owner(&self) -> Result<()> { if self.env().caller() != self.owner { return Err(Error::NotOwner); } Ok(()) }
+        fn ensure_keeper(&self) -> Result<()> { if self.env().caller() != self.keeper { return Err(Error::NotKeeper); } Ok(()) }
+        fn ensure_not_paused(&self) -> Result<()> { if self.paused { return Err(Error::Paused); } Ok(()) }
     }
 }

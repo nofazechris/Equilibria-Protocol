@@ -15,6 +15,72 @@ import random
 import argparse
 from datetime import datetime
 from substrateinterface import SubstrateInterface, Keypair
+import asyncio
+import threading
+import websockets
+import json
+import queue
+
+# WebSocket broadcast
+_loop = None
+_clients = set()
+
+def start_ws_server():
+    global _loop
+    _loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(_loop)
+    
+    async def handler(ws):
+        _clients.add(ws)
+        try:
+            await ws.wait_closed()
+        finally:
+            _clients.discard(ws)
+    
+    async def serve():
+        async with websockets.serve(handler, "localhost", 8765):
+            await asyncio.Future()
+    
+    _loop.run_until_complete(serve())
+
+
+_log_queue = queue.Queue()
+_clients = set()
+
+def broadcast_log(level, message, score=None):
+    _log_queue.put_nowait({
+        "time": datetime.now().strftime("%H:%M:%S"),
+        "type": level.strip(),
+        "message": message,
+        "score": score
+    })
+
+async def ws_handler(websocket):
+    _clients.add(websocket)
+    try:
+        await websocket.wait_closed()
+    finally:
+        _clients.discard(websocket)
+
+async def ws_broadcaster():
+    while True:
+        try:
+            msg = _log_queue.get_nowait()
+            if _clients:
+                data = json.dumps(msg)
+                await asyncio.gather(*[c.send(data) for c in list(_clients)], return_exceptions=True)
+        except queue.Empty:
+            pass
+        await asyncio.sleep(0.1)
+
+async def ws_main():
+    async with websockets.serve(ws_handler, "localhost", 8765):
+        await ws_broadcaster()
+
+def start_ws_server():
+    asyncio.run(ws_main())
+
+threading.Thread(target=start_ws_server, daemon=True).start()
 
 #  CONFIG 
 
@@ -46,7 +112,9 @@ PAIRS = ["POT/rUSD", "POT/USDC", "rUSD/POT"]
 def ts():
     return datetime.now().strftime("%H:%M:%S")
 
-def log(level, msg):
+def log(level, msg, score=None):
+    print(f"[{ts()}] [{level:<7}] {msg}")
+    broadcast_log(level, msg, score)
     level_colors = {
         "SCAN":    "",
         "DETECT":  "",
@@ -239,11 +307,7 @@ def run(use_public=False):
                 for market, s in qualified:
                     opp_counter += 1
                     size = recommended_size(market)
-                    log("APPROVE", (
-                        f"{market['pair']} — composite {s['composite']} "
-                        f"| size: {size:,} POT "
-                        f"| opp #{opp_counter}"
-                    ))
+                    log("APPROVE", f"{market['pair']} — composite {s['composite']} | size: {size:,} POT | opp #{opp_counter}", score=s['composite'])
                     post_to_registry(node, keeper, opp_counter, market, s)
             else:
                 log("SCAN", "No qualifying opportunities this scan")

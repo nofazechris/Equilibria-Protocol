@@ -1,0 +1,11 @@
+/home/chris/equilibria/contracts/opportunity_registry/target/ink/release/deps/ink_metadata-aba0fad4d08b7058.d: /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/lib.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/layout/mod.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/layout/validate.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/specs.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/utils.rs
+
+/home/chris/equilibria/contracts/opportunity_registry/target/ink/release/deps/libink_metadata-aba0fad4d08b7058.rlib: /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/lib.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/layout/mod.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/layout/validate.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/specs.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/utils.rs
+
+/home/chris/equilibria/contracts/opportunity_registry/target/ink/release/deps/libink_metadata-aba0fad4d08b7058.rmeta: /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/lib.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/layout/mod.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/layout/validate.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/specs.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/utils.rs
+
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/lib.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/layout/mod.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/layout/validate.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/specs.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ink_metadata-4.3.0/src/utils.rs:

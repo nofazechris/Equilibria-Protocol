@@ -16,8 +16,8 @@ export default function StabilityPool() {
   const [amount, setAmount] = useState('')
   const [tab, setTab]       = useState('deposit')
 
-  const sharesReceived = amount ? (parseFloat(amount) * 0.98).toFixed(2) : '—'
-  const potReceived    = amount ? (parseFloat(amount) * 1.02).toFixed(2) : '—'
+  const yieldEstimate = amount ? (parseFloat(amount) * 0.087 / 12).toFixed(2) : '—'
+  const potReceived = amount ? (parseFloat(amount) * 1.02).toFixed(2) : '—'
 
   return (
     <div className="pool-wrapper">
@@ -31,7 +31,7 @@ export default function StabilityPool() {
       <div className="pool-metric-strip">
         {[
           { label: 'POOL TVL',     value: `${(poolState.totalDeposited / 1000000).toFixed(3)}M POT`, color: 'var(--text-primary)' },
-          { label: 'YOUR SHARES',  value: '0 EQB',    color: 'var(--text-primary)' },
+          { label: 'YOUR DEPOSIT', value: '0 POT',    color: 'var(--text-primary)' },
           { label: 'CURRENT APR',  value: `${poolState.apr}%`, color: 'var(--green)' },
           { label: 'YOUR YIELD',   value: '0 POT',    color: 'var(--text-primary)' },
         ].map(({ label, value, color }) => (
@@ -76,8 +76,8 @@ export default function StabilityPool() {
           ))}
         </div>
 
-        <div className="action-input-label">
-          {tab === 'deposit' ? 'AMOUNT TO DEPOSIT (POT)' : 'SHARES TO REDEEM (EQB)'}
+        <div style={{ fontSize: '11px', color: '#3d4f63', marginBottom: '8px', letterSpacing: '0.06em' }}>
+            {tab === 'deposit' ? 'AMOUNT TO DEPOSIT (POT)' : 'AMOUNT TO WITHDRAW (POT)'}
         </div>
 
         <div className="action-input-row">
@@ -97,14 +97,14 @@ export default function StabilityPool() {
           {tab === 'deposit' ? (
             <>
               <TxRow label="You deposit"   value={amount ? `${parseFloat(amount).toLocaleString()} POT` : '—'} />
-              <TxRow label="You receive"   value={`${sharesReceived} EQB`} />
-              <TxRow label="Exchange rate" value="1 POT = 0.980 EQB" />
+              <TxRow label="Pool share"    value={`${((parseFloat(amount || 0) / 4280000) * 100).toFixed(4)}%`} />
+              <TxRow label="Yield rate"    value="8.7% APR" />
             </>
           ) : (
             <>
-              <TxRow label="You redeem"    value={amount ? `${parseFloat(amount).toLocaleString()} EQB` : '—'} />
-              <TxRow label="You receive"   value={`${potReceived} POT`} />
-              <TxRow label="Exchange rate" value="1 EQB = 1.020 POT" />
+              <TxRow label="You withdraw"  value={amount ? `${parseFloat(amount).toLocaleString()} POT` : '—'} />
+              <TxRow label="Yield earned"  value={`+${potReceived} POT`} />
+              <TxRow label="Return"        value="~8.7% APR" />
             </>
           )}
           <TxRow label="Pool utilization"    value={`${poolState.utilizationRate}%`} valueColor="var(--yellow)" />

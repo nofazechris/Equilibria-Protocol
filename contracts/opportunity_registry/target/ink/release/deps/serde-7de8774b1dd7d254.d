@@ -1,0 +1,14 @@
+/home/chris/equilibria/contracts/opportunity_registry/target/ink/release/deps/serde-7de8774b1dd7d254.d: /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/chris/equilibria/contracts/opportunity_registry/target/ink/release/build/serde-8b98dece957347a0/out/private.rs
+
+/home/chris/equilibria/contracts/opportunity_registry/target/ink/release/deps/libserde-7de8774b1dd7d254.rlib: /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/chris/equilibria/contracts/opportunity_registry/target/ink/release/build/serde-8b98dece957347a0/out/private.rs
+
+/home/chris/equilibria/contracts/opportunity_registry/target/ink/release/deps/libserde-7de8774b1dd7d254.rmeta: /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/chris/equilibria/contracts/opportunity_registry/target/ink/release/build/serde-8b98dece957347a0/out/private.rs
+
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/home/chris/equilibria/contracts/opportunity_registry/target/ink/release/build/serde-8b98dece957347a0/out/private.rs:
+
+# env-dep:OUT_DIR=/home/chris/equilibria/contracts/opportunity_registry/target/ink/release/build/serde-8b98dece957347a0/out

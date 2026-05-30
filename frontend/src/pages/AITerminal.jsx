@@ -10,36 +10,16 @@ export default function AITerminal() {
   const [scanInterval, setScanInterval] = useState(3)
   const bottomRef                   = useRef()
 
-  useEffect(() => {
-    if (!running) return
-    const interval = setInterval(() => {
-      const pair    = PAIRS[Math.floor(Math.random() * PAIRS.length)]
-      const now     = new Date().toTimeString().slice(0, 8)
-      const spread  = (Math.random() * 3 + 0.3).toFixed(2)
-      const profit  = Math.floor(Math.random() * 40 + 45)
-      const risk    = Math.floor(Math.random() * 50 + 10)
-      const stab    = Math.floor(Math.random() * 40 + 50)
-      const conf    = Math.floor(Math.random() * 30 + 60)
-      const composite = Math.round(profit * 0.3 + (100 - risk) * 0.25 + stab * 0.35 + conf * 0.1)
+ useEffect(() => {
+    const ws = new WebSocket('ws://localhost:8765')
+    ws.onmessage = (event) => {
+        const log = JSON.parse(event.data)
+        setLogs(prev => [...prev.slice(-80), log])
+    }
+    ws.onerror = () => console.log('Keeper not connected — using simulation')
+    return () => ws.close()
+}, [])
 
-      const batch = [
-        { time: now, type: 'SCAN',   message: `Scan #${Math.floor(Math.random() * 900 + 100)} — monitoring ${PAIRS.length} active pairs`, score: null },
-      ]
-
-      if (Math.random() > 0.3) {
-        batch.push({ time: now, type: 'DETECT', message: `Price divergence: ${pair} spread ${spread}% between Pool A and Pool B`, score: null })
-        batch.push({ time: now, type: 'SCORE',  message: `Profit ${profit} · Risk ${risk} · Stability ${stab} · Confidence ${conf}`, score: null })
-        batch.push(composite >= 70
-          ? { time: now, type: 'APPROVE', message: `Composite ${composite} ≥ 70 threshold. Posting to registry.`, score: composite }
-          : { time: now, type: 'REJECT',  message: `Composite ${composite} < 70 threshold. Opportunity discarded.`, score: composite }
-        )
-      }
-
-      setLogs(prev => [...prev.slice(-80), ...batch])
-    }, scanInterval * 1000)
-
-    return () => clearInterval(interval)
-  }, [running, scanInterval])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
